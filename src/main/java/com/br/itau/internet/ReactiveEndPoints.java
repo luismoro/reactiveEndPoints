@@ -4,40 +4,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
-import org.springframework.http.codec.BodyInserters;
-import org.springframework.http.server.reactive.HttpHandler;
-import org.springframework.http.server.reactive.ReactorHttpHandlerAdapter;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.*;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-import reactor.ipc.netty.http.server.HttpServer;
 
-import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
+
+import reactor.core.publisher.Flux;
 
 @SpringBootApplication
 public class ReactiveEndPoints {
 
-	@Bean
-	RouterFunction<?> router(PersonHandler handler) {
-		return RouterFunctions.route(RequestPredicates.GET("/persons"), handler::all)
-				.and(RouterFunctions.route(RequestPredicates.GET("/persons/{id}"), handler::byId));
-	}
+//	@Bean
+//	RouterFunction<?> router(PersonHandler handler) {
+//		return RouterFunctions.route(RequestPredicates.GET("/persons"), handler::all)
+//				.and(RouterFunctions.route(RequestPredicates.GET("/persons/{id}"), handler::byId));
+//	}
 
-	@Bean
-	HttpServer server (RouterFunction<?> router) {
-		HttpHandler handler = RouterFunctions.toHttpHandler(router);
-		HttpServer httpServer = HttpServer.create(8080);
-		httpServer.newHandler(new ReactorHttpHandlerAdapter(handler));
-		return httpServer;
-	}
+//	@Bean
+//	HttpServer server (RouterFunction<?> router) {
+//		HttpHandler handler = RouterFunctions.toHttpHandler(router);
+////		HttpServer httpServer = HttpServer.create(8080);
+//		Tomcat
+//		httpServer.newHandler(new ReactorHttpHandlerAdapter(handler));
+//		return httpServer;
+//	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(ReactiveEndPoints.class, args);
@@ -54,15 +48,20 @@ class PersonHandler {
 		this.personRepository = personRepository;
 	}
 
-	ServerResponse<Flux<Person>> all(ServerRequest request) {
-		Flux<Person> flux = Flux.fromStream(personRepository.all());
-		return ServerResponse.ok().body(BodyInserters.fromPublisher(flux, Person.class));
+//	ServerResponse<Flux<Person>> all(ServerRequest request) {
+//		Flux<Person> flux = Flux.fromStream(personRepository.all());
+//		return ServerResponse.ok().body(BodyInserters.fromPublisher(flux, Person.class));
+//	}
+
+	public Flux<Person> all() {
+
+		return Flux.fromStream(personRepository.all()).awaitOnSubscribe();
 	}
 
-	ServerResponse<Mono<Person>> byId(ServerRequest request) {
-		String id = request.pathVariable("id");
-		return ServerResponse.ok().body(BodyInserters.fromPublisher(Mono.fromFuture(personRepository.findById(id)), Person.class));
-	}
+//	ServerResponse<Mono<Person>> byId(ServerRequest request) {
+//		String id = request.pathVariable("id");
+//		return ServerResponse.ok().body(BodyInserters.fromPublisher(Mono.fromFuture(personRepository.findById(id)), Person.class));
+//	}
 }
 
 @Component
@@ -77,10 +76,10 @@ class SampleDataCLR implements CommandLineRunner {
 
 	@Override
 	public void run(String... strings) throws Exception {
-		Stream.of("Luis Moro", "Renan Barbioni", "André Formento", "Antonio Neto", "Emerson Muraro")
-		.forEach( name -> personRepository.save(new Person(name, new Random().nextInt(100))));
-
-		personRepository.findAll().forEach(System.out::println);
+//		Stream.of("Luis Moro", "Renan Barbioni", "André Formento", "Antonio Neto", "Emerson Muraro")
+//		.forEach( name -> personRepository.save(new Person(name, new Random().nextInt(100))));
+//
+//		personRepository.findAll().forEach(System.out::println);
 	}
 }
 
