@@ -14,6 +14,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @SpringBootApplication
 public class ReactiveEndPoints {
@@ -54,9 +55,12 @@ class PersonHandler {
 //	}
 
 	public Flux<Person> all() {
-
 		return Flux.fromStream(personRepository.all()).awaitOnSubscribe();
 	}
+
+    public Mono<Person> byId(String id) {
+        return Mono.fromFuture(personRepository.findById(id));
+    }
 
 //	ServerResponse<Mono<Person>> byId(ServerRequest request) {
 //		String id = request.pathVariable("id");
