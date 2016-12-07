@@ -55,7 +55,7 @@ class PersonHandler {
 //	}
 
 	public Flux<Person> all() {
-		return Flux.fromStream(personRepository.all()).awaitOnSubscribe();
+		return Flux.fromStream(personRepository.all());
 	}
 
     public Mono<Person> byId(String id) {
