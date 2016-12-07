@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
-
-import reactor.core.publisher.Flux;
 
 /**
  * Created by luismoro on 05/12/16.
@@ -20,14 +20,14 @@ public class PersonController {
     PersonHandler personHandler;
 
     @RequestMapping(value = {"/persons"}, method = RequestMethod.GET)
-    public Flux<Person> getAllPersons() {
-//        Iterable<Person> persons = personHandler.all().toIterable();
-//        List<Person> personList =  new ArrayList<>();
-//        for (Person person : persons) {
-//            personList.add(person);
-//        }
+    public List<Person> getAllPersons() {
+        Iterable<Person> persons = personHandler.all().toIterable();
+        List<Person> personList =  new ArrayList<>();
+        for (Person person : persons) {
+            personList.add(person);
+        }
 
-        return personHandler.all();
+        return personList;
     }
 
     @RequestMapping(value = {"/persons/{id}"}, method = RequestMethod.GET)
