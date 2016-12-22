@@ -19,9 +19,28 @@ class Person {
 	public Person() {
 	}
 
-	public Person(String name, int age) {
-		this.name = name;
-		this.age = age;
+    public Person(String id, String name, int age) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+    }
+
+	public Person(String id, String name, Integer age, Person p) {
+		this.id = id;
+
+		if (name == null) {
+			this.name = p.getName();
+		}
+		else {
+			this.name = name;
+		}
+
+		if (age == null) {
+			this.age = p.getAge();
+		}
+		else {
+			this.age = age;
+		}
 	}
 
 	@Override
@@ -37,23 +56,19 @@ class Person {
 		return id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
-
 	public String getName() {
 		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public int getAge() {
 		return age;
 	}
 
-	public void setAge(int age) {
-		this.age = age;
-	}
+//    public static class Builder  extends Person{
+//
+//        public Person build(){
+//            return
+//        }
+//    }
+
 }

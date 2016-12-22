@@ -19,7 +19,7 @@ public class SampleDataCLR implements CommandLineRunner {
 
     @Override
     public void run(String... strings) throws Exception {
-//		Stream.of("Teste")
+//		Stream.of("Teste", "Renan Barbioni", "André Formento", "Antonio Neto", "Emerson Muraro")
 //		.forEach( name -> personRepository.save(new Person(name, new Random().nextInt(100))));
 //
 //		personRepository.findAll().forEach(System.out::println);

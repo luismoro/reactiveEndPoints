@@ -12,19 +12,37 @@ import reactor.core.publisher.Mono;
 @Component
 class PersonService {
 
-	private final PersonRepository personRepository;
+    private final PersonRepository personRepository;
 
-	@Autowired
-	PersonService(PersonRepository personRepository) {
-		this.personRepository = personRepository;
-	}
-
-	public Flux<Person> all() {
-		return Flux.fromStream(personRepository.all());
-	}
-
-    public Mono<Person> byId(String id) {
-		return Mono.fromFuture(personRepository.findById(id));
+    @Autowired
+    PersonService(PersonRepository personRepository) {
+        this.personRepository = personRepository;
     }
 
+    public Flux<Person> all() {
+        return Flux.fromStream(personRepository.all());
+    }
+
+    public Mono<Person> byId(String id) {
+        return Mono.fromFuture(personRepository.findById(id));
+    }
+
+    public Person save(Person person) {
+        return personRepository.save(person);
+    }
+
+    public Person save(String id, Person person) {
+        Person p = new Person(id, person.getName(), person.getAge());
+
+        return personRepository.save(p);
+    }
+
+    public Mono<Person> justSave(String id, Person person) {
+        Mono<Person> mono = Mono.fromFuture(personRepository.findById(id));
+
+        return mono.map(p -> {
+            Person personUpdated = new Person(id, person.getName(), person.getAge(), p);
+            return personRepository.save(personUpdated);
+        });
+    }
 }
